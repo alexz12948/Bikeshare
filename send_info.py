@@ -30,7 +30,10 @@ def create_list(b):
     return list
 
 '''
-
+random_bike_data
+Input: N/A
+Output: a dictionary of bikes
+Does: creates a dictionary of random bike data
 '''
 def random_bike_data():
     list = [0] * NUM_BIKES
@@ -47,17 +50,13 @@ app = Flask(__name__)
 
 d = random_bike_data()
 
-@app.route('/test_data')
-def test_data():
-    return d
-
 #--------------------------------------------------------#
 
 @app.route('/')
 def index():
     return render_template('welcome.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/user_login', methods=['GET', 'POST'])
 def user_login():
     error = None
 
@@ -72,6 +71,10 @@ def user_login():
 @app.route('/login_success')
 def phrase():
     return "Was able to successfully login"
+
+@app.route('/test_data')
+def test_data():
+    return json.dumps(d)
 
 if __name__ == '__main__':
     app.run()
