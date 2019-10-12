@@ -38,7 +38,7 @@ Does: creates a dictionary of random bike data
 def random_bike_data():
     list = [0] * NUM_BIKES
     for i in range(NUM_BIKES):
-        list[i] = randint(1, 101)
+        list[i] = randint(1, 100)
 
     bikes = {}
     for i in range(NUM_BIKES):
