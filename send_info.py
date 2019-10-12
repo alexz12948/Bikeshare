@@ -4,15 +4,10 @@ on a website
 '''
 
 from bike import Bike
-import flask
+from flask import Flask, render_template, url_for, redirect, request
 import flask_login
 import json
 import os
-
-
-app = flask.Flask(__name__)
-login_manager = flask_login.LoginManager()
-#hello
 
 '''
 create_list
@@ -32,6 +27,8 @@ def create_list(b):
 
     return list
 
+app = Flask(__name__)
+
 test1 = Bike(1)
 test2 = Bike(5)
 test3 = Bike(9)
@@ -40,14 +37,27 @@ d = {1 : create_list(test1),
      5 : create_list(test2), 
      9 : create_list(test3)}
 
+#--------------------------------------------------------#
+
 @app.route('/')
 def redirect():
-    return flask.redirect(flask.url_for('/login/'))
+    return redirect(url_for('login'))
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    return "HI!"
+    error = None
+
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+           error = "INVALID CREDENTIALS"
+        else:
+            return redirect(url_for('test'))
+
+    return render_template('login.html', error=error)
+
+@app.route('/test')
+def print():
+    return "Was able to successfully login"
 
 if __name__ == '__main__':
     app.run()
