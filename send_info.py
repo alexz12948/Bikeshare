@@ -7,8 +7,8 @@ NUM_BIKES = 30
 
 from bike import Bike
 from flask import Flask, render_template, url_for, redirect, request
+from configparser import ConfigParser
 import json
-import os
 from random import randint
 
 '''
@@ -46,7 +46,29 @@ def random_bike_data():
 
     return bikes
 
+'''
+check_user
+Inputs: the config file and a name/password in the form of a string
+Output: a boolean
+Does: determines whether or not the name and password exist and 
+      are linked together
+'''
+def check_user(cfg, name, password):
+    if name in cfg['admins']:
+        if cfg['admins'][name] == password:
+            return True
+
+    if name in cfg['users']:
+        if cfg['users'][name] == password:
+            return True
+
+    return False
+
+
 app = Flask(__name__)
+cfg = ConfigParser()
+
+cfg.read('users.cfg')
 
 d = random_bike_data()
 
@@ -61,7 +83,7 @@ def user_login():
     error = None
 
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'bikeshare':
+        if not check_user(cfg, request.form['username'], request.form['password']):
            error = "INVALID CREDENTIALS"
         else:
             return redirect(url_for('phrase'))
@@ -75,6 +97,10 @@ def phrase():
 @app.route('/test_data')
 def test_data():
     return json.dumps(d)
+
+# @app.route('/unit_testing')
+# def unit_test():
+#     return cfg.get("admins", "andrew")
 
 if __name__ == '__main__':
     app.run()
