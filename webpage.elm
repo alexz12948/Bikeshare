@@ -3,12 +3,9 @@ import Http
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode exposing (Decoder, map4, at, string, int, bool)
-<<<<<<< HEAD
+import Json.Decode exposing (Decoder, map4, field, list, at, string, int, bool)
 import Dict exposing (Dict, fromList, empty, insert)
-=======
-import Dict
->>>>>>> 4f3df86259a848e11ed70bbbf8048b3e4b213c62
+import Debug exposing(log)
 
 
 
@@ -51,19 +48,21 @@ init _ =
 
 
 type Msg
-  = GotData (Result Http.Error String)
+  = GotData (Result Http.Error (List Bike))
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    GotData result ->
-      case result of
-        Ok url ->
-          (Success url, Cmd.none)
+    GotData (Ok bikes) ->
+      ( model
+        , Cmd.none
+        )
 
-        Err _ ->
-          (Failure, Cmd.none)
+    GotData (Err bikes ) ->
+          ( Failure
+            , Cmd.none
+          )
 
 
 -- VIEW
@@ -93,57 +92,36 @@ viewData model =
 
 
 -- HTTP
-<<<<<<< HEAD
-bikes : Dict String Bike
-bikes =
-  empty
-
-getBikeData : Cmd Msg
-getBikeData =
- Http.get
-   { url = "http://localhost:5000/test_data"
-   , expect = Http.expectJson GotData dataDecoder
-   }
-=======
-
+-- bikes : Dict String Bike
+-- bikes =
+--   empty
 
 getBikeData : Cmd Msg
 getBikeData =
   Http.get
-    { url = "http://127.0.0.1:5000/"
-    , expect = Http.expectJson GotData dataDecoder
-    }
->>>>>>> 4f3df86259a848e11ed70bbbf8048b3e4b213c62
+   { url = "http://localhost:5000/test_data"
+   , expect = Http.expectJson GotData (list dataDecoder)
+   }
 
 
-dataDecoder : Decoder String
+dataDecoder : Decoder Bike
 dataDecoder =
-<<<<<<< HEAD
-  decodeBikeDict
-
-decodeBikeDict : Decoder (Dict String Bike)
-decodeBikeDict =
-  insert (
-    String.fromInt (at ["number"] int)
-    , map4 Bike
+  map4 Bike
       (at ["number"] int)
       (at ["last_user"] string)
       (at ["checkout_time"] int)
       (at ["needs_maintenance"] bool)
-    )
-=======
-  at ["id"] string
 
-decodeBike : Decoder Bike
-decodeBike =
-  map4 Bike
-    (at ["number"] int)
-    (at ["last_user"] string)
-    (at ["checkout_time"] int)
-    (at ["needs_maintenance"] bool)
-
-
->>>>>>> 4f3df86259a848e11ed70bbbf8048b3e4b213c62
+-- decodeBikeDict : Decoder (Dict String Bike)
+-- decodeBikeDict =
+--   insert (
+--     String.fromInt (at ["number"] int)
+--     , map4 Bike
+--       (at ["number"] int)
+--       (at ["last_user"] string)
+--       (at ["checkout_time"] int)
+--       (at ["needs_maintenance"] bool)
+--     )
 
 
 subscriptions : Model -> Sub Msg
