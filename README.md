@@ -7,7 +7,10 @@
 
 ## Acknowledgements:
 * Harrison Kaiser
+* David Massart
+* Deepanshu Utkarsh
 
 ### External Sources
 * https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms
 * https://docs.python.org/3/library/json.html
+*
