@@ -46,8 +46,8 @@ def test_dat():
 #--------------------------------------------------------#
 
 @app.route('/')
-def redirect():
-    return "Hi" #render_template('welcome.html')
+def index():
+    return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -57,7 +57,7 @@ def login():
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
            error = "INVALID CREDENTIALS"
         else:
-            return redirect(url_for('test'), code=307)
+            return redirect(url_for('print'))
 
     return render_template('login.html', error=error)
 
