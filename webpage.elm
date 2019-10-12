@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, at, string, int, bool)
-import Dict exposing (Dict, fromList)
+import Dict exposing (Dict, fromList, empty, insert)
 
 
 
@@ -89,30 +89,30 @@ viewData model =
 -- HTTP
 bikes : Dict String Bike
 bikes =
-  fromList
-    [ ("1", Bike 1 "" -1 False)
-    , ("2", Bike 2  "" -1 True)
-    , ("3", Bike 3 "" -1 False)
-    ]
+  empty
 
 getBikeData : Cmd Msg
 getBikeData =
  Http.get
-   { url = "http://127.0.0.1:5000/"
+   { url = "http://localhost:5000/test_data"
    , expect = Http.expectJson GotData dataDecoder
    }
- -- phone {"1" : [1,"",-1,false],"5" : [5,"",-1,false],"9" : [9,"",-1,false]} dict
 
 
 dataDecoder : Decoder String
 dataDecoder =
-  map4 Bike
-    (at ["number"] int)
-    (at ["last_user"] string)
-    (at ["checkout_time"] int)
-    (at ["needs_maintenance"] bool)
+  decodeBikeDict
 
-
+decodeBikeDict : Decoder (Dict String Bike)
+decodeBikeDict =
+  insert (
+    String.fromInt (at ["number"] int)
+    , map4 Bike
+      (at ["number"] int)
+      (at ["last_user"] string)
+      (at ["checkout_time"] int)
+      (at ["needs_maintenance"] bool)
+    )
 
 
 subscriptions : Model -> Sub Msg
