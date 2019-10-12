@@ -10,10 +10,12 @@ body {
 }
 
 p {
-  color: blue;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  color: brown;
   border: 5px solid brown;
   padding: 30px;
-  margin-right: 550px;
+  margin-right: 925px;
   float:right;
 }
 
