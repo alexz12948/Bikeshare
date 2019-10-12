@@ -5,9 +5,9 @@ on a website
 
 from bike import Bike
 from flask import Flask, render_template, url_for, redirect, request
-import flask_login
 import json
 import os
+from random import randint
 
 '''
 create_list
@@ -27,7 +27,17 @@ def create_list(b):
 
     return list
 
-app = Flask(__name__)
+'''
+
+'''
+def random_bike_data():
+    list = [0] * 10
+    for i in range(10):
+        list[i] = randint(1, 101)
+
+    print(list)
+
+#app = Flask(__name__)
 
 test1 = Bike(1)
 test2 = Bike(5)
@@ -36,8 +46,6 @@ test3 = Bike(9)
 d = {1 : create_list(test1), 
      5 : create_list(test2), 
      9 : create_list(test3)}
-
-print(json.dumps(d))
 
 @app.route('/test_data')
 def test_dat():
@@ -54,7 +62,7 @@ def login():
     error = None
 
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if request.form['username'] != 'admin' or request.form['password'] != 'bikeshare':
            error = "INVALID CREDENTIALS"
         else:
             return redirect(url_for('phrase'))
