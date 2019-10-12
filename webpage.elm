@@ -3,7 +3,7 @@ import Http
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode exposing (Decoder, map2, field, string, int, bool)
+import Json.Decode exposing (Decoder, map4, at, string, int, bool)
 import Dict
 
 
@@ -16,6 +16,7 @@ main =
     { init = init
     , update = update
     , view = view
+    , subscriptions = subscriptions
     }
 
 
@@ -38,7 +39,7 @@ type alias Bike =
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  (Loading, getRandomCatGif)
+  (Loading, getBikeData)
 
 
 
@@ -46,17 +47,13 @@ init _ =
 
 
 type Msg
-  = MorePlease
-  | GotGif (Result Http.Error String)
+  = GotData (Result Http.Error String)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    MorePlease ->
-      (Loading, getRandomCatGif)
-
-    GotGif result ->
+    GotData result ->
       case result of
         Ok url ->
           (Success url, Cmd.none)
@@ -72,28 +69,23 @@ view : Model -> Html Msg
 view model =
   div []
     [ h2 [] [ text "Shrek is God" ]
-    , viewGif model
+    , viewData model
     ]
 
 
-viewGif : Model -> Html Msg
-viewGif model =
+viewData : Model -> Html Msg
+viewData model =
   case model of
     Failure ->
       div []
         [ text "I could not load a bike for some reason. "
-        , button [ onClick MorePlease ] [ text "Try Again!" ]
         ]
 
     Loading ->
       text "Loading..."
 
     Success url ->
-      div []
-        [ button [ onClick MorePlease, style "display" "block" ] [ text "More Please!" ]
-        , img [ src url ] []
-        ]
-
+      text "a bike"
 
 
 -- HTTP
@@ -103,29 +95,25 @@ getBikeData : Cmd Msg
 getBikeData =
   Http.get
     { url = "http://127.0.0.1:5000/"
-    , expect = Http.expectJson
+    , expect = Http.expectJson GotData dataDecoder
     }
 
 
-decoder : Decoder (Dict.Dict String Bike)
-decoder =
-  map (Dict.map infoToBike) (dict infoDecoder)
+dataDecoder : Decoder String
+dataDecoder =
+  at ["id"] string
 
-type alias Info =
-  { number : Int
-  , last_user : String
-  , checkout_time : Int
-  , needs_maintenance : Bool
-  }
+decodeBike : Decoder Bike
+decodeBike =
+  map4 Bike
+    (at ["number"] int)
+    (at ["last_user"] string)
+    (at ["checkout_time"] int)
+    (at ["needs_maintenance"] bool)
 
-infoDecoder : Decoder Info
-infoDecoder =
-  map2 Bike
-    (field "number" int)
-    (field "last_user" string)
-    (field "checkout_time" int)
-    (field "needs_maintenance" bool)
 
-infoToBike : String -> Info -> Bike
-infoToBike number { last_user, checkout_time, needs_maintenance } =
-  Bike number last_user checkout_time needs_maintenance
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.none
