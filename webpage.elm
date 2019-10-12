@@ -4,7 +4,11 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, at, string, int, bool)
+<<<<<<< HEAD
+import Dict exposing (Dict, fromList, empty, insert)
+=======
 import Dict
+>>>>>>> 4f3df86259a848e11ed70bbbf8048b3e4b213c62
 
 
 
@@ -89,6 +93,18 @@ viewData model =
 
 
 -- HTTP
+<<<<<<< HEAD
+bikes : Dict String Bike
+bikes =
+  empty
+
+getBikeData : Cmd Msg
+getBikeData =
+ Http.get
+   { url = "http://localhost:5000/test_data"
+   , expect = Http.expectJson GotData dataDecoder
+   }
+=======
 
 
 getBikeData : Cmd Msg
@@ -97,10 +113,25 @@ getBikeData =
     { url = "http://127.0.0.1:5000/"
     , expect = Http.expectJson GotData dataDecoder
     }
+>>>>>>> 4f3df86259a848e11ed70bbbf8048b3e4b213c62
 
 
 dataDecoder : Decoder String
 dataDecoder =
+<<<<<<< HEAD
+  decodeBikeDict
+
+decodeBikeDict : Decoder (Dict String Bike)
+decodeBikeDict =
+  insert (
+    String.fromInt (at ["number"] int)
+    , map4 Bike
+      (at ["number"] int)
+      (at ["last_user"] string)
+      (at ["checkout_time"] int)
+      (at ["needs_maintenance"] bool)
+    )
+=======
   at ["id"] string
 
 decodeBike : Decoder Bike
@@ -112,6 +143,7 @@ decodeBike =
     (at ["needs_maintenance"] bool)
 
 
+>>>>>>> 4f3df86259a848e11ed70bbbf8048b3e4b213c62
 
 
 subscriptions : Model -> Sub Msg
