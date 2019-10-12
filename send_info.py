@@ -57,12 +57,12 @@ def login():
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
            error = "INVALID CREDENTIALS"
         else:
-            return redirect(url_for('print'))
+            return redirect(url_for('phrase'))
 
     return render_template('login.html', error=error)
 
 @app.route('/test')
-def print():
+def phrase():
     return "Was able to successfully login"
 
 if __name__ == '__main__':
