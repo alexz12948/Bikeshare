@@ -10,7 +10,7 @@ class Bike:
     ID = 0
     last_user = ""
     checkout_time = 0
-    needs_maintaince = False
+    needs_maintenance = False
     
     '''Constructor'''
     def __init__(self, ID):

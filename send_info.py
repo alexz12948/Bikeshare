@@ -4,15 +4,14 @@ on a website
 '''
 
 from bike import Bike
-from flask import Flask, render_template, flash, redirect, url_for
-from config import Config
-from login import LoginForm
+import flask
+import flask_login
 import json
 import os
 
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'bikeshare'
+app = flask.Flask(__name__)
+login_manager = flask_login.LoginManager()
 
 '''
 create_list
@@ -41,8 +40,13 @@ d = {1 : create_list(test1),
      9 : create_list(test3)}
 
 @app.route('/')
-def print_dictionary():
-    return d
+def redirect():
+    return flask.redirect(flask.url_for('/login/'))
+
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return "HI!"
 
 if __name__ == '__main__':
     app.run()
