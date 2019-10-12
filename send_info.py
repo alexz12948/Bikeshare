@@ -4,10 +4,15 @@ on a website
 '''
 
 from bike import Bike
-from flask import Flask
+from flask import Flask, render_template, flash, redirect, url_for
+from config import Config
+from login import LoginForm
 import json
+import os
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'bikeshare'
 
 '''
 create_list
