@@ -37,10 +37,16 @@ d = {1 : create_list(test1),
      5 : create_list(test2), 
      9 : create_list(test3)}
 
+print(json.dumps(d))
+
+@app.route('/test_data')
+def test_dat():
+    return d
+
 #--------------------------------------------------------#
 
 @app.route('/')
-def redirect():
+def index():
     return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -51,12 +57,12 @@ def login():
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
            error = "INVALID CREDENTIALS"
         else:
-            return redirect(url_for('test'))
+            return redirect(url_for('phrase'))
 
     return render_template('login.html', error=error)
 
 @app.route('/test')
-def print():
+def phrase():
     return "Was able to successfully login"
 
 if __name__ == '__main__':
