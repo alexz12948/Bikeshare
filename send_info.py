@@ -3,6 +3,8 @@ Sends information about bikes at the station to a server which will be displayed
 on a website
 '''
 
+NUM_BIKES = 30
+
 from bike import Bike
 from flask import Flask, render_template, url_for, redirect, request
 import json
@@ -31,24 +33,22 @@ def create_list(b):
 
 '''
 def random_bike_data():
-    list = [0] * 10
-    for i in range(10):
+    list = [0] * NUM_BIKES
+    for i in range(NUM_BIKES):
         list[i] = randint(1, 101)
 
-    print(list)
+    bikes = {}
+    for i in range(NUM_BIKES):
+        bikes[list[i]] = create_list(Bike(list[i]))
 
-#app = Flask(__name__)
+    return bikes
 
-test1 = Bike(1)
-test2 = Bike(5)
-test3 = Bike(9)
+app = Flask(__name__)
 
-d = {1 : create_list(test1), 
-     5 : create_list(test2), 
-     9 : create_list(test3)}
+d = random_bike_data()
 
 @app.route('/test_data')
-def test_dat():
+def test_data():
     return d
 
 #--------------------------------------------------------#
@@ -58,7 +58,7 @@ def index():
     return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def user_login():
     error = None
 
     if request.method == 'POST':
@@ -69,7 +69,7 @@ def login():
 
     return render_template('login.html', error=error)
 
-@app.route('/test')
+@app.route('/login_success')
 def phrase():
     return "Was able to successfully login"
 
