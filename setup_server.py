@@ -85,22 +85,24 @@ def user_login():
     if request.method == 'POST':
         if not check_user(cfg, request.form['username'], request.form['password']):
            error = "INVALID CREDENTIALS"
+        elif request.form['username'] in cfg['admins']:
+            return redirect(url_for('admins'))
         else:
-            return redirect(url_for('phrase'))
+            return redirect(url_for('client'))
 
     return render_template('login.html', error=error)
 
-@app.route('/login_success')
-def phrase():
-    return "Was able to successfully login"
+@app.route('/admins')
+def admins():
+    return "You are an admin"
+
+@app.route('/useable_bikes')
+def client():
+    return "Bikes!"
 
 @app.route('/test_data')
 def test_data():
     return json.dumps(d)
-
-# @app.route('/unit_testing')
-# def unit_test():
-#     return cfg.get("admins", "andrew")
 
 if __name__ == '__main__':
     app.run()
