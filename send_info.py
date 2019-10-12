@@ -41,7 +41,7 @@ d = {1 : create_list(test1),
 
 @app.route('/')
 def redirect():
-    return redirect(url_for('login'))
+    return render_template('welcome.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
