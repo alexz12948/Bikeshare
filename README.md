@@ -1,4 +1,4 @@
-# Polyhack
+# Bikeshare
 ## Contributors:
 * Liana Wang
 * Andrew Zhang
