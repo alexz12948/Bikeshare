@@ -1,5 +1,6 @@
 '''
-
+Sends information about bikes at the station to a server which will be displayed
+on a website
 '''
 
 from bike import Bike
