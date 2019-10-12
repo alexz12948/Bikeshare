@@ -1,7 +1,7 @@
 h1 {
   font-family: 'Fascinate Inline', cursive;
   float:right;
-  margin-right: 650px;
+  margin-right: 550px;
   left: 10px;
 }
 
@@ -13,11 +13,14 @@ p {
   color: blue;
   border: 5px solid brown;
   padding: 30px;
-  margin-right: 1295px;
+  margin-right: 550px;
+  float:right;
 }
 
 jumboLogo {
   float: left;
   padding-right: 10px;
   border-radius: 70px;
+  height: 50;
+  width: 50px;
 }
