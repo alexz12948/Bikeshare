@@ -1,5 +1,8 @@
 h1 {
   font-family: 'Fascinate Inline', cursive;
+  float:right;
+  margin-right: 650px;
+  left: 10px;
 }
 
 body {
@@ -8,4 +11,13 @@ body {
 
 p {
   color: blue;
+  border: 5px solid brown;
+  padding: 30px;
+  margin-right: 1295px;
+}
+
+jumboLogo {
+  float: left;
+  padding-right: 10px;
+  border-radius: 70px;
 }
