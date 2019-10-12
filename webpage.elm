@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode exposing (Decoder, map4, at, string, int, bool)
-import Dict
+import Dict exposing (Dict, fromList)
 
 
 
@@ -20,9 +20,7 @@ main =
     }
 
 
-
 -- MODEL
-
 
 type Model
   = Failure
@@ -89,22 +87,25 @@ viewData model =
 
 
 -- HTTP
-
+bikes : Dict String Bike
+bikes =
+  fromList
+    [ ("1", Bike 1 "" -1 False)
+    , ("2", Bike 2  "" -1 True)
+    , ("3", Bike 3 "" -1 False)
+    ]
 
 getBikeData : Cmd Msg
 getBikeData =
-  Http.get
-    { url = "http://127.0.0.1:5000/"
-    , expect = Http.expectJson GotData dataDecoder
-    }
+ Http.get
+   { url = "http://127.0.0.1:5000/"
+   , expect = Http.expectJson GotData dataDecoder
+   }
+ -- phone {"1" : [1,"",-1,false],"5" : [5,"",-1,false],"9" : [9,"",-1,false]} dict
 
 
 dataDecoder : Decoder String
 dataDecoder =
-  at ["id"] string
-
-decodeBike : Decoder Bike
-decodeBike =
   map4 Bike
     (at ["number"] int)
     (at ["last_user"] string)
